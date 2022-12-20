@@ -2,7 +2,9 @@ package config
 
 import (
 	"fmt"
+	"github.com/gookit/event"
 	"github.com/rivo/tview"
+	"rc-cli/app/pages"
 	"rc-cli/cli"
 	"rc-cli/docker"
 	"rc-cli/element"
@@ -61,6 +63,8 @@ func BuildConfigForm() *tview.Flex {
 		traefik.WriteMiddlewaresFileIfNeeded(filesystem.DataPath)
 		traefik.WriteRoutersFileIfNeeded(filesystem.DataPath)
 		traefik.WriteConfigFile(filesystem.DataPath)
+
+		event.MustFire("switchPage", event.M{"name": pages.HomePage})
 	})
 
 	configFormLayout.AddItem(configForm, 0, 1, true)

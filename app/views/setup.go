@@ -5,10 +5,10 @@ import (
 	"rc-cli/app/views/config"
 )
 
-func BuildInitialSetupPage() *tview.Flex {
+func buildSetupPage() *tview.Flex {
 	page := tview.NewFlex().SetDirection(tview.FlexRow)
 
-	page.AddItem(config.BuildConfigForm(), 17, 1, true)
+	page.AddItem(config.BuildConfigForm(), 0, 1, true)
 
 	return page
 }

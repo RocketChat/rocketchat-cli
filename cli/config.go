@@ -36,20 +36,15 @@ type ConfigDef struct {
 
 var Config ConfigDef
 
-func GetExpectedURLs(url string, hasFederation bool, hasElement bool) []string {
+func GetExpectedURLs() []string {
 	expectedUrls := []string{
-		url,
-		fmt.Sprintf("traefik.%s", url),
+		Config.Hostname,
+		fmt.Sprintf("traefik.%s", Config.Hostname),
 	}
 
-	if hasFederation {
-		expectedUrls = append(expectedUrls, fmt.Sprintf("matrix.%s", url))
-		expectedUrls = append(expectedUrls, fmt.Sprintf("synapse.%s", url))
-
-		if hasElement {
-			expectedUrls = append(expectedUrls, fmt.Sprintf("element.%s", url))
-		}
-	}
+	expectedUrls = append(expectedUrls, fmt.Sprintf("matrix.%s", Config.Hostname))
+	expectedUrls = append(expectedUrls, fmt.Sprintf("synapse.%s", Config.Hostname))
+	expectedUrls = append(expectedUrls, fmt.Sprintf("element.%s", Config.Hostname))
 
 	return expectedUrls
 }

@@ -11,9 +11,9 @@ var App = tview.NewApplication()
 func InitializeApp() {
 	layout := views.InitializeMainView()
 
-	// Listen to focus change
-	event.On("setFocus", event.ListenerFunc(func(e event.Event) error {
-		App.SetFocus(e.Get("element").(tview.Primitive))
+	// Listen to quit
+	event.On("quit", event.ListenerFunc(func(e event.Event) error {
+		App.Stop()
 		return nil
 	}), event.Normal)
 
