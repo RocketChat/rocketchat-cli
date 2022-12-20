@@ -1,0 +1,3 @@
+package traefik
+
+const acmeDefaults = `{}`
