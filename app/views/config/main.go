@@ -36,11 +36,15 @@ func BuildConfigForm() *tview.Flex {
 		cli.WriteConfigFile(filesystem.RootPath)
 
 		docker.Compose.Services.Element.Image = fmt.Sprintf("vectorim/element-web:%s", cli.Config.Element.Tag)
+		docker.Compose.Services.Element.Labels[2] = fmt.Sprintf("traefik.http.routers.traefik.rule=Host(`element.%s`)", cli.Config.Hostname)
 		docker.Compose.Services.Rocketchat.Image = fmt.Sprintf("rocketchat/rocket.chat:%s", cli.Config.RocketChat.Tag)
 		docker.Compose.Services.Synapse.Image = fmt.Sprintf("matrixdotorg/synapse:%s", cli.Config.Synapse.Tag)
+		docker.Compose.Services.Synapse.Labels[2] = fmt.Sprintf("traefik.http.routers.traefik.rule=Host(`synapse.%s`)", cli.Config.Hostname)
 		docker.Compose.Services.Traefik.Image = fmt.Sprintf("traefik:%s", cli.Config.Traefik.Tag)
+		docker.Compose.Services.Traefik.Labels[2] = fmt.Sprintf("traefik.http.routers.traefik.rule=Host(`traefik.%s`)", cli.Config.Hostname)
 		docker.Compose.Services.Redis.Image = fmt.Sprintf("redis:%s", cli.Config.Redis.Tag)
 		docker.Compose.Services.Nginx.Image = fmt.Sprintf("nginx:%s", cli.Config.Nginx.Tag)
+		docker.Compose.Services.Nginx.Labels[2] = fmt.Sprintf("traefik.http.routers.traefik.rule=Host(`%s`)", cli.Config.Hostname)
 		docker.WriteComposeFile(filesystem.RootPath)
 
 		element.Config.DefaultServerConfig.Homeserver.BaseUrl = fmt.Sprintf("https://synapse.%s", cli.Config.Hostname)
