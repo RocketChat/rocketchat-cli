@@ -6,6 +6,18 @@ import (
 	"rocketchat-cli/app/pages"
 )
 
+type PageBuildFunc func() *tview.Flex
+
+var pageBuildFunctions = map[pages.Page]PageBuildFunc{
+	pages.WelcomePage:       buildWelcomePage,
+	pages.CurrentConfigPage: buildCurrentConfigPage,
+	pages.ConfigPage:        buildConfigPage,
+}
+
+func addPage(pageName pages.Page, element *tview.Flex) {
+	pages.AddPage(pageName, element, true, false)
+}
+
 func InitializeMainView() *tview.Flex {
 	layout := tview.NewFlex().SetDirection(tview.FlexRow)
 
@@ -13,8 +25,16 @@ func InitializeMainView() *tview.Flex {
 	pages.Initialize()
 
 	// Build pages
-	pages.AddPage(pages.HomePage, buildHomePage(), true, false)
-	pages.AddPage(pages.SetupPage, buildSetupPage(), true, false)
+	for pageName, buildFunc := range pageBuildFunctions {
+		addPage(pageName, buildFunc())
+	}
+
+	// Listen to refresh page events
+	event.On("refreshPage", event.ListenerFunc(func(e event.Event) error {
+		page := e.Get("name").(pages.Page)
+		addPage(page, pageBuildFunctions[page]())
+		return nil
+	}), event.AboveNormal)
 
 	// Layout
 	layout.

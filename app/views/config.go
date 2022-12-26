@@ -5,7 +5,7 @@ import (
 	"rocketchat-cli/app/views/config"
 )
 
-func buildSetupPage() *tview.Flex {
+func buildConfigPage() *tview.Flex {
 	page := tview.NewFlex().SetDirection(tview.FlexRow)
 
 	page.AddItem(config.BuildConfigForm(), 0, 1, true)

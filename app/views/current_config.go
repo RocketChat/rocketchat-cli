@@ -9,31 +9,25 @@ import (
 	"strings"
 )
 
-func buildHomePage() *tview.Flex {
+func buildCurrentConfigPage() *tview.Flex {
 	page := tview.NewFlex().SetDirection(tview.FlexRow)
 
-	welcomeText := "Welcome to the Rocket.Chat CLI!"
-
-	if cli.HasConfig() {
-		welcomeText = fmt.Sprintf(`
+	uiWelcome := tview.NewTextView()
+	uiWelcome.SetText(fmt.Sprintf(`
 You current install:
  - Hostname: %s
 
 The following entries must exist on your DNS, pointing to your server's IP address:
  - %s
-`, cli.Config.Hostname, strings.Join(cli.GetExpectedURLs(), "\n - "))
-	}
-
-	uiWelcome := tview.NewTextView()
-	uiWelcome.SetText(welcomeText)
+`, cli.Config.Hostname, strings.Join(cli.GetExpectedURLs(), "\n - ")))
 
 	page.AddItem(uiWelcome, 11, 1, false)
 
 	// Menu Items
 	uiMenuList := tview.NewList().
 		ShowSecondaryText(false).
-		AddItem("Configure", "", 'r', func() {
-			event.MustFire("switchPage", event.M{"name": pages.SetupPage})
+		AddItem("Reconfigure", "", 'r', func() {
+			event.MustFire("switchPage", event.M{"name": pages.ConfigPage})
 		}).
 		AddItem("Quit", "", 'q', func() {
 			event.MustFire("quit", nil)

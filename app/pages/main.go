@@ -3,13 +3,16 @@ package pages
 import (
 	"github.com/gookit/event"
 	"github.com/rivo/tview"
+	"rocketchat-cli/cli"
 )
 
 type Page string
 
 const (
-	SetupPage Page = "initial-setup"
-	HomePage  Page = "existing-setup"
+	HomePage          Page = "home"
+	CurrentConfigPage Page = "current-config"
+	WelcomePage       Page = "welcome"
+	ConfigPage        Page = "config"
 )
 
 var pages = tview.NewPages()
@@ -17,7 +20,16 @@ var pages = tview.NewPages()
 func Initialize() {
 	// Listen for page switching events
 	event.On("switchPage", event.ListenerFunc(func(e event.Event) error {
-		SwitchPage(e.Get("name").(Page))
+		if e.Get("name").(Page) == HomePage {
+			if cli.HasConfig() {
+				SwitchPage(CurrentConfigPage)
+			} else {
+				SwitchPage(WelcomePage)
+			}
+		} else {
+			SwitchPage(e.Get("name").(Page))
+		}
+		
 		return nil
 	}), event.Normal)
 

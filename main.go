@@ -7,6 +7,7 @@ import (
 	"flag"
 	"github.com/gookit/event"
 	"rocketchat-cli/app"
+	"rocketchat-cli/app/pages"
 	"rocketchat-cli/cli"
 	"rocketchat-cli/docker"
 	"rocketchat-cli/element"
@@ -33,6 +34,7 @@ func main() {
 	// Listen to reload config
 	event.On("reloadConfig", event.ListenerFunc(func(e event.Event) error {
 		cli.ReadConfigFile(filesystem.RootPath)
+		event.MustFire("refreshPage", event.M{"name": pages.CurrentConfigPage})
 		return nil
 	}), event.AboveNormal)
 
