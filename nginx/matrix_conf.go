@@ -6,7 +6,7 @@ import (
 	"github.com/tufanbarisyildirim/gonginx/parser"
 	"log"
 	"os"
-	"rc-cli/filesystem"
+	"rocketchat-cli/filesystem"
 	"strconv"
 )
 

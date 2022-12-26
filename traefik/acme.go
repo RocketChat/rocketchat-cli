@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 	"os"
-	"rc-cli/filesystem"
+	"rocketchat-cli/filesystem"
 )
 
 func WriteACMEFileIfNeeded(basePath string) {

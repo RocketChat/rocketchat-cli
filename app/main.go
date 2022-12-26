@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/gookit/event"
 	"github.com/rivo/tview"
-	"rc-cli/app/views"
+	"rocketchat-cli/app/views"
 )
 
 var App = tview.NewApplication()

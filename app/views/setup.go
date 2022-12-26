@@ -2,7 +2,7 @@ package views
 
 import (
 	"github.com/rivo/tview"
-	"rc-cli/app/views/config"
+	"rocketchat-cli/app/views/config"
 )
 
 func buildSetupPage() *tview.Flex {

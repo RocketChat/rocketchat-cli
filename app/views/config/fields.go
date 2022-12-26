@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/rivo/tview"
-	"rc-cli/cli"
+	"rocketchat-cli/cli"
 )
 
 func buildRocketChatTagField() *tview.InputField {

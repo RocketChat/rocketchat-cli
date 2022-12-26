@@ -16,3 +16,4 @@
 data/
 .cli_config.yaml
 docker-compose.yml
+rocketchat-cli

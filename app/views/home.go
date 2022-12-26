@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gookit/event"
 	"github.com/rivo/tview"
-	"rc-cli/app/pages"
-	"rc-cli/cli"
+	"rocketchat-cli/app/pages"
+	"rocketchat-cli/cli"
 	"strings"
 )
 

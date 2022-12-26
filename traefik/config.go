@@ -4,7 +4,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
-	"rc-cli/filesystem"
+	"rocketchat-cli/filesystem"
 )
 
 type ConfigDef struct {

@@ -5,14 +5,14 @@ package main
 
 import (
 	"flag"
-	"rc-cli/app"
-	"rc-cli/cli"
-	"rc-cli/docker"
-	"rc-cli/element"
-	"rc-cli/filesystem"
-	"rc-cli/matrix"
-	"rc-cli/nginx"
-	"rc-cli/traefik"
+	"rocketchat-cli/app"
+	"rocketchat-cli/cli"
+	"rocketchat-cli/docker"
+	"rocketchat-cli/element"
+	"rocketchat-cli/filesystem"
+	"rocketchat-cli/matrix"
+	"rocketchat-cli/nginx"
+	"rocketchat-cli/traefik"
 )
 
 // Definitions

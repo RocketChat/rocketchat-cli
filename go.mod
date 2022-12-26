@@ -1,4 +1,4 @@
-module rc-cli
+module rocketchat-cli
 
 go 1.19
 

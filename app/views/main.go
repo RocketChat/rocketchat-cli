@@ -3,7 +3,7 @@ package views
 import (
 	"github.com/gookit/event"
 	"github.com/rivo/tview"
-	"rc-cli/app/pages"
+	"rocketchat-cli/app/pages"
 )
 
 func InitializeMainView() *tview.Flex {

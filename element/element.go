@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"rc-cli/filesystem"
+	"rocketchat-cli/filesystem"
 )
 
 type ConfigDef struct {
