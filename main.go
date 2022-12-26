@@ -5,6 +5,7 @@ package main
 
 import (
 	"flag"
+	"github.com/gookit/event"
 	"rocketchat-cli/app"
 	"rocketchat-cli/cli"
 	"rocketchat-cli/docker"
@@ -28,6 +29,12 @@ var devMode = flag.Bool("dev", false, "Enable development mode")
 func main() {
 	// Load the cli config file
 	cli.ReadConfigFile(filesystem.RootPath)
+
+	// Listen to reload config file
+	event.On("reloadConfigFile", event.ListenerFunc(func(e event.Event) error {
+		cli.ReadConfigFile(filesystem.RootPath)
+		return nil
+	}), event.Normal)
 
 	// Parse and set the flags
 	flag.Parse()

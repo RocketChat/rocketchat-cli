@@ -41,7 +41,7 @@ func BuildConfigForm() *tview.Flex {
 		docker.Compose.Services.Traefik.Image = fmt.Sprintf("traefik:%s", cli.Config.Traefik.Tag)
 		docker.Compose.Services.Redis.Image = fmt.Sprintf("redis:%s", cli.Config.Redis.Tag)
 		docker.Compose.Services.Nginx.Image = fmt.Sprintf("nginx:%s", cli.Config.Nginx.Tag)
-		docker.WriteComposeFile(filesystem.DataPath)
+		docker.WriteComposeFile(filesystem.RootPath)
 
 		element.Config.DefaultServerConfig.Homeserver.BaseUrl = fmt.Sprintf("https://synapse.%s", cli.Config.Hostname)
 		element.Config.DefaultServerConfig.Homeserver.ServerName = cli.Config.Hostname
@@ -64,6 +64,7 @@ func BuildConfigForm() *tview.Flex {
 		traefik.WriteRoutersFileIfNeeded(filesystem.DataPath)
 		traefik.WriteConfigFile(filesystem.DataPath)
 
+		event.MustFire("switchPage", event.M{"name": pages.HomePage})
 		event.MustFire("switchPage", event.M{"name": pages.HomePage})
 	})
 
