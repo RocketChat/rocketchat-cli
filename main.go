@@ -30,11 +30,11 @@ func main() {
 	// Load the cli config file
 	cli.ReadConfigFile(filesystem.RootPath)
 
-	// Listen to reload config file
-	event.On("reloadConfigFile", event.ListenerFunc(func(e event.Event) error {
+	// Listen to reload config
+	event.On("reloadConfig", event.ListenerFunc(func(e event.Event) error {
 		cli.ReadConfigFile(filesystem.RootPath)
 		return nil
-	}), event.Normal)
+	}), event.AboveNormal)
 
 	// Parse and set the flags
 	flag.Parse()

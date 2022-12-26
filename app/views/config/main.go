@@ -68,7 +68,7 @@ func BuildConfigForm() *tview.Flex {
 		traefik.WriteRoutersFileIfNeeded(filesystem.DataPath)
 		traefik.WriteConfigFile(filesystem.DataPath)
 
-		event.MustFire("switchPage", event.M{"name": pages.HomePage})
+		event.MustFire("reloadConfig", nil)
 		event.MustFire("switchPage", event.M{"name": pages.HomePage})
 	})
 
