@@ -1,0 +1,61 @@
+name: Build and Optionally Update Release
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  pull_request:
+    branches:
+      - main
+    types:
+      - synchronize
+      - opened
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-release:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    strategy:
+      # max-parallel: 2
+      fail-fast: false # don't stop other matrix steps if one fails
+      matrix: 
+        os: 
+          - linux
+          - darwin
+          - windows
+        arch:
+          - arm64
+          - amd64
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.19.0'
+      - run: go version # check if PATH is ok or not;
+      - run: go build -o rocketchat-cli-${{ matrix.os }}.${{ matrix.arch }}
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+      - if: ${{ success() && github.event_name == 'release' }} 
+        uses: 'softprops/action-gh-release@v1'
+        with:
+          files: rocketchat-cli-${{ matrix.os }}.${{ matrix.arch }}
+
+  convert-to-draft-if-failed:
+    if: ${{ github.event_name == 'release' }}
+    runs-on: ubuntu-latest
+    needs: 
+      - build-and-release
+    steps:
+      - if: ${{ needs.build-and-release.result != 'success' && needs.build-and-release.result != 'skipped' }}
+        uses: 'softprops/action-gh-release@v1'
+        with:
+          draft: true
+
