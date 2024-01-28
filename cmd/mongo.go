@@ -12,15 +12,15 @@ func mongoCommand() *cobra.Command {
 	c := &cobra.Command{
 		Use: "mongo",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			m, err := native.NewMongoManager("5.0.23", "/opt/booster")
+			m, err := native.NewMongoManager("6.0.4", "/opt/booster")
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			/* err = m.Install()
+			err = m.Install()
 			if err != nil {
 				return err
-			} */
+			}
 
 			v, err := m.Mongod().Version()
 			if err != nil {

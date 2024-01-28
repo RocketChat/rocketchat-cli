@@ -221,6 +221,13 @@ func (m *M) init() error {
 }
 
 func (m *M) getTarget() (string, error) {
+	// TODO(debdut): this was for development,
+	// make sure isn't in production
+	target := os.Getenv("OVERWRITE_MONGODB_TARGET")
+	if target != "" {
+		return target, nil
+	}
+
 	os, err := internal.OsRelease()
 	if err != nil {
 		return "", err
@@ -229,7 +236,7 @@ func (m *M) getTarget() (string, error) {
 	switch os.Id {
 	case "ubuntu":
 		switch os.VersionId {
-		case "20.04", "18.04", "18.10", "20.10", "21.04", "21.10", "22.04", "22.10":
+		case "20.04", "18.04", "18.10", "20.10", "21.04", "21.10", "22.04", "22.10", "23.04", "23.10":
 			return os.Id + strings.ReplaceAll(os.VersionId, ".", ""), nil
 		}
 	case "debian":
