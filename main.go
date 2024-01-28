@@ -1,60 +1,31 @@
-// Rocket.Chat CLI
-// Author: Alan Sikora <alan.sikora@rocket.chat>
-// https://github.com/alansikora
 package main
 
 import (
-	"flag"
-	"github.com/gookit/event"
-	"rocketchat-cli/app"
-	"rocketchat-cli/app/pages"
-	"rocketchat-cli/cli"
-	"rocketchat-cli/docker"
-	"rocketchat-cli/element"
-	"rocketchat-cli/filesystem"
-	"rocketchat-cli/matrix"
-	"rocketchat-cli/nginx"
-	"rocketchat-cli/traefik"
+	"io"
+	"os"
+
+	"github.com/rocketchat/booster/cmd"
+	"github.com/rocketchat/booster/internal"
+	"github.com/sirupsen/logrus"
 )
 
-// Definitions
-var devMode = flag.Bool("dev", false, "Enable development mode")
-
-//var synapseLatestImageVersion string
-//var synapseImageVersions []string
-//var dendriteLatestImageVersion string
-//var dendriteImageVersions []string
-//var rocketChatLatestImageVersion string
-//var rocketChatImageVersions []string
+const LOG_FILE = "/tmp/booster.log"
 
 func main() {
-	// Load the cli config file
-	cli.ReadConfigFile(filesystem.RootPath)
+	var writer io.Writer
 
-	// Listen to reload config
-	event.On("reloadConfig", event.ListenerFunc(func(e event.Event) error {
-		cli.ReadConfigFile(filesystem.RootPath)
-		event.MustFire("refreshPage", event.M{"name": pages.CurrentConfigPage})
-		return nil
-	}), event.AboveNormal)
+	if f, err := os.OpenFile(LOG_FILE, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600); err != nil {
+		logrus.Errorf("failed to open logfile %s, error: %v", LOG_FILE, err)
+		writer = io.Discard
+	} else {
+		writer = f
+		defer f.Close()
+	}
 
-	// Parse and set the flags
-	flag.Parse()
-	cli.Config.Config.DevMode = *devMode
+	generator := internal.NewLoggerGenerator(writer)
 
-	//// Load the docker image versions
-	//fmt.Println("Loading Docker image versions...")
-	//synapseLatestImageVersion, synapseImageVersions = GetSynapseImageVersions(false)
-	//dendriteLatestImageVersion, dendriteImageVersions = GetDendriteImageVersions(false)
-	//rocketChatLatestImageVersion, rocketChatImageVersions = GetRocketChatImageVersions(false)
 
-	// Load all config files
-	docker.ReadComposeFile(filesystem.DataPath)
-	element.ReadConfigFile(filesystem.DataPath)
-	matrix.ReadHomeserverFile(matrix.SynapseType, filesystem.DataPath)
-	matrix.ReadRegistrationFile(matrix.SynapseType, filesystem.DataPath)
-	nginx.ReadMatrixConfFile(filesystem.DataPath)
-	traefik.ReadConfigFile(filesystem.DataPath)
-
-	app.InitializeApp()
+	if err := cmd.RootCmd(generator).Execute(); err != nil {
+		panic(err)
+	}
 }
